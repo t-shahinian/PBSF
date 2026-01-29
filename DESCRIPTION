@@ -1,0 +1,18 @@
+Package: PBSF
+Type: Package
+Title: Projected Bayesian Spatial Factor Model
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: me <yourself@somewhere.net>
+Description: Provides methods for Bayesian spatial factor analysis using latent spatial factors. The implementation is written in Julia and uses nearest-neighbor Gaussian process approximations, sparse matrix computations, and iterative solvers to enable scalable Markov chain Monte Carlo sampling. It integrates R-based spatial utilities for spatial ordering and neighbor selection.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.3
+Imports:
+    JuliaCall,
+    spNNGP,
+    GPvecchia
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
