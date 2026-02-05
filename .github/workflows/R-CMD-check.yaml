@@ -44,7 +44,30 @@ jobs:
         with:
           version: '1'
           arch: 'default'
+
           show-versioninfo: 'false'
+
+      - name: Install Julia packages
+        run: |
+          julia -e '
+            using Pkg
+            Pkg.add([
+              "RCall",
+              "LinearAlgebra",
+              "SparseArrays",
+              "Distributions",
+              "RData",
+              "Distances",
+              "GeoStats",
+              "ProgressMeter",
+              "IterativeSolvers",
+              "Random",
+              "RandomizedLinAlg"
+            ])
+          '
+
+
+
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

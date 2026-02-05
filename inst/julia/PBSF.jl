@@ -17,10 +17,6 @@ include("util2.jl")
 
 
 R"""
-## gpt recommended hte below. check it out/confirm???
-if (!requireNamespace("GPvecchia", quietly = TRUE)) {
-  stop("The R package 'GPvecchia' is required but not installed. Please install it with install.packages('GPvecchia').")
-}
 library(GPvecchia)
 """
 
