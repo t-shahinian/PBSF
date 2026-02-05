@@ -2,10 +2,9 @@ Package: PBSF
 Type: Package
 Title: Projected Bayesian Spatial Factor Model
 Version: 0.1.0
-Authors@R: c(person("Lu", "Zhang", email = "lzhang63@usc.edu",
-  role = c("aut", "cre")),("Kelly", "Street", email = "kelly.street@usc.edu",
-  role = c("aut", "cre")),("Tatiana", "Shahinian", email = "ts78642@usc.edu",
-  role = c("aut", "cre")))
+Authors@R: c(person("Lu", "Zhang", email = "lzhang63@usc.edu", role = "aut"),
+  person("Kelly", "Street", email = "kelly.street@usc.edu", role = "aut"),
+  person("Tatiana", "Shahinian", email = "ts78642@usc.edu",role = c("aut", "cre")))
 Maintainer: me <yourself@somewhere.net>
 Description: Provides methods for Bayesian spatial factor analysis using latent 
  spatial factors. The implementation is written in Julia and uses 

@@ -86,7 +86,7 @@ test_that("all inputs must be fully observed", {
       phi_K = bad$phi_K,
       K = bad$K
     ),
-    "All inputs must be fully observed"
+    "All inputs must be non missing"
   )
 })
 
@@ -269,6 +269,7 @@ test_that("N_sam must be a single positive integer", {
 })
 
 ######## ???? everything works except these two tests. fix later
+
 # ---- Test 11: julia_mcmc returns correctly structured output ----
 test_that("julia_mcmc returns structured MCMC output", {
   skip_on_cran()

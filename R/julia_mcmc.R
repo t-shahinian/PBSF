@@ -83,6 +83,7 @@ julia_mcmc<-function(coords,X,Y,phi_K,K,m=10, N_sam = 5) { ## returns F, gamma (
   if (!is.matrix(coords)) {
     stop("coords must be a matrix")
   }
+
   if (!is.numeric(coords)) {
     stop("coords must be numeric")
   }
@@ -93,7 +94,7 @@ julia_mcmc<-function(coords,X,Y,phi_K,K,m=10, N_sam = 5) { ## returns F, gamma (
       any(!is.finite(X)) ||
       any(!is.finite(Y)) ||
       any(!is.finite(phi_K))) {
-    stop("All inputs must be fully observed (no NA, NaN, or Inf values)")
+    stop("All inputs must be non missing (no NA, NaN, or Inf values)") # ?? specify which one has missing
   }
 
 ### ensures k is a single positive integer ###
