@@ -40,6 +40,12 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1'
+          arch: 'default'
+          show-versioninfo: 'false'
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
