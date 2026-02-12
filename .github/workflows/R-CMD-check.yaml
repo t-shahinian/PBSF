@@ -54,6 +54,7 @@ jobs:
             Pkg.add([
               "RCall",
               "LinearAlgebra",
+              "DataFrames",
               "SparseArrays",
               "Distributions",
               "RData",
