@@ -69,7 +69,7 @@ julia_mcmc<-function(coords,X,Y,phi_K,K,m=10, N_sam = 5) { ## returns F, gamma (
 
 
   # Locate Julia backend shipped with the package
-  jl_file <- system.file("julia", "PBSF.jl", package = "PBSF")
+  jl_file <- system.file("PBSF.jl", package = "PBSF")
 
   ## --------------------------------------------------
   ## 2. Input validation (USER-FACING CHECKS)
