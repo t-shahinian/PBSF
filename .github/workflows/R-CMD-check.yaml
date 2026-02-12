@@ -64,7 +64,8 @@ jobs:
               "IterativeSolvers",
               "Random",
               "RandomizedLinAlg",
-              "PrettyTables"
+              "PrettyTables",
+              "Suppressor"
             ])
           '
 
