@@ -63,7 +63,8 @@ jobs:
               "ProgressMeter",
               "IterativeSolvers",
               "Random",
-              "RandomizedLinAlg"
+              "RandomizedLinAlg",
+              "PrettyTables"
             ])
           '
 
