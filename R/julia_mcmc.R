@@ -159,12 +159,22 @@ julia_mcmc<-function(coords,X,Y,phi_K,K,m=10, N_sam = 5) { ## returns F, gamma (
 ## -------------------------
 ## 4. Missing data check
 ## -------------------------
-    if (any(!is.finite(coords)) ||
-        any(!is.finite(X)) ||
-        any(!is.finite(Y)) ||
-        any(!is.finite(phi_K))) {
-      stop("All inputs must be non missing (no NA, NaN, or Inf values)") # ?? specify which one has missing
+    if (any(!is.finite(coords))) {
+      stop("coords contains NA, NaN, or Inf values")
     }
+
+    if (any(!is.finite(X))) {
+      stop("X contains NA, NaN, or Inf values")
+    }
+
+    if (any(!is.finite(Y))) {
+      stop("Y contains NA, NaN, or Inf values")
+    }
+
+    if (any(!is.finite(phi_K))) {
+      stop("phi_K contains NA, NaN, or Inf values")
+    }
+
 
 
 

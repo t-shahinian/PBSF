@@ -82,41 +82,61 @@ test_that("coords must be a numeric 2-column matrix", {
 
 
 # ---- Test: inputs must not contain NA/NaN/Inf ----
-test_that("all inputs must be fully observed", {
+test_that("coords cannot contain missing values", {
+
   good <- make_valid_inputs()
 
-  # Case 1: NA in phi_K
-  bad1 <- good
-  bad1$phi_K[1] <- NA
-  expect_error(
-    julia_mcmc(bad1$coords, bad1$X, bad1$Y, bad1$phi_K, bad1$K),
-    "All inputs must be non missing"
-  )
+  bad_coords <- good$coords
+  bad_coords[1, 1] <- NA
 
-  # Case 2: NA in coords
-  bad2 <- good
-  bad2$coords[1, 1] <- NA
   expect_error(
-    julia_mcmc(bad2$coords, bad2$X, bad2$Y, bad2$phi_K, bad2$K),
-    "All inputs must be non missing"
-  )
-
-  # Case 3: Inf in X
-  bad3 <- good
-  bad3$X[1, 1] <- Inf
-  expect_error(
-    julia_mcmc(bad3$coords, bad3$X, bad3$Y, bad3$phi_K, bad3$K),
-    "All inputs must be non missing"
-  )
-
-  # Case 4: NaN in Y
-  bad4 <- good
-  bad4$Y[1, 1] <- NaN
-  expect_error(
-    julia_mcmc(bad4$coords, bad4$X, bad4$Y, bad4$phi_K, bad4$K),
-    "All inputs must be non missing"
+    julia_mcmc(bad_coords, good$X, good$Y, good$phi_K, good$K),
+    "coords contains NA, NaN, or Inf values"
   )
 })
+
+
+test_that("X cannot contain missing values", {
+
+  good <- make_valid_inputs()
+
+  bad_X <- good$X
+  bad_X[1, 1] <- NA
+
+  expect_error(
+    julia_mcmc(good$coords, bad_X, good$Y, good$phi_K, good$K),
+    "X contains NA, NaN, or Inf values"
+  )
+})
+
+
+test_that("Y cannot contain missing values", {
+
+  good <- make_valid_inputs()
+
+  bad_Y <- good$Y
+  bad_Y[1, 1] <- NA
+
+  expect_error(
+    julia_mcmc(good$coords, good$X, bad_Y, good$phi_K, good$K),
+    "Y contains NA, NaN, or Inf values"
+  )
+})
+
+
+test_that("phi_K cannot contain missing values", {
+
+  good <- make_valid_inputs()
+
+  bad_phi <- good$phi_K
+  bad_phi[1] <- NA
+
+  expect_error(
+    julia_mcmc(good$coords, good$X, good$Y, bad_phi, good$K),
+    "phi_K contains NA, NaN, or Inf values"
+  )
+})
+
 
 
 # ---- Test 5: K must be a single positive integer ----
