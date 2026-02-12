@@ -42,9 +42,8 @@ jobs:
 
       - uses: julia-actions/setup-julia@v2
         with:
-          version: '1'
+          version: 'lts'
           arch: 'default'
-
           show-versioninfo: 'false'
 
       - name: Install Julia packages
