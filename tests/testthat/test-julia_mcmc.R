@@ -14,14 +14,32 @@ library(testthat)
 # ---- Helper: create a minimal valid input set ----
   # use this to create correct input, then in the tests we purposely
   # change the value we are testing
-make_valid_inputs <- function(n = 5, p = 2, q = 3, K = 2) {
-  coords <- matrix(runif(n * 1), nrow = n, ncol = 1)   # allow 1D coords per your design
+make_valid_inputs <- function(n = 15, p = 2, q = 3, K = 2) {
+  coords <- matrix(runif(n * 2), nrow = n, ncol = 2)
   X <- matrix(rnorm(n * p), nrow = n, ncol = p)
   Y <- matrix(rnorm(n * q), nrow = n, ncol = q)
   phi_K <- rep(1.0, K)
+
   list(coords = coords, X = X, Y = Y, phi_K = phi_K, K = K)
 }
 
+
+# m < n (number of neighbors is less than sample size)
+test_that("m must be less than n", {
+  good <- make_valid_inputs(n = 5)
+
+  expect_error(
+    julia_mcmc(
+      good$coords,
+      good$X,
+      good$Y,
+      good$phi_K,
+      good$K,
+      m = 5
+    ),
+    "m must be less than"
+  )
+})
 # ---- Test 1: coords must be a matrix ----
 test_that("coords must be a matrix", {
   bad <- make_valid_inputs()
@@ -70,6 +88,43 @@ test_that("coords must be numeric", {
       K = bad$K
     ),
     "coords must be numeric"
+  )
+})
+
+# ---- coords must be 2 dimensional ---- #
+test_that("coords must have exactly 2 columns", {
+  good <- make_valid_inputs()
+
+  # Case 1: only 1 column
+  bad1 <- good
+  bad1$coords <- matrix(runif(nrow(good$coords)), ncol = 1)
+
+  expect_error(
+    julia_mcmc(
+      coords = bad1$coords,
+      X = bad1$X,
+      Y = bad1$Y,
+      phi_K = bad1$phi_K,
+      K = bad1$K
+    ),
+    "coords must have exactly 2 columns"
+  )
+
+  # Case 2: 3 columns
+  bad2 <- good
+  bad2$coords <- matrix(runif(nrow(good$coords) * 3),
+                        nrow = nrow(good$coords),
+                        ncol = 3)
+
+  expect_error(
+    julia_mcmc(
+      coords = bad2$coords,
+      X = bad2$X,
+      Y = bad2$Y,
+      phi_K = bad2$phi_K,
+      K = bad2$K
+    ),
+    "coords must have exactly 2 columns"
   )
 })
 
@@ -143,23 +198,9 @@ test_that("K must be a single positive integer", {
   )
 })
 
-# ---- Test 6: matrices must have at least one row and one column ----
-test_that("coords, X, and Y must be non-empty matrices", {
+# ---- Test 6: X and Y must have at least one row and one column ----
+test_that("X, and Y must be non-empty matrices", {
   good <- make_valid_inputs()
-
-  # coords: zero rows
-  bad1 <- good
-  bad1$coords <- matrix(numeric(0), nrow = 0, ncol = 1)
-  expect_error(
-    julia_mcmc(
-      coords = bad1$coords,
-      X = bad1$X,
-      Y = bad1$Y,
-      phi_K = bad1$phi_K,
-      K = bad1$K
-    ),
-    "coords must have at least one row and one column"
-  )
 
   # X: zero columns
   bad2 <- good
@@ -326,4 +367,45 @@ test_that("MCMC output dimensions match model specification", {
   expect_equal(ncol(res$gamma_samples), (p + K) * q)
   expect_equal(ncol(res$sigma_samples), q)
   expect_equal(ncol(res$F_samples), n * K)
+})
+
+# ---- Test 13: minimal valid call runs without error ----
+test_that("minimal valid example runs without error", {
+  skip_on_cran()
+
+  good <- make_valid_inputs()
+
+  expect_no_error(
+    julia_mcmc(
+      coords = good$coords,
+      X = good$X,
+      Y = good$Y,
+      phi_K = good$phi_K,
+      K = good$K,
+      m = 2,
+      N_sam = 2
+    )
+  )
+})
+
+# ---- Test 14: returned object has exactly expected names ----
+test_that("returned object has exactly expected components", {
+  skip_on_cran()
+
+  good <- make_valid_inputs()
+
+  res <- julia_mcmc(
+    coords = good$coords,
+    X = good$X,
+    Y = good$Y,
+    phi_K = good$phi_K,
+    K = good$K,
+    m = 2,
+    N_sam = 2
+  )
+
+  expect_setequal(
+    names(res),
+    c("gamma_samples", "sigma_samples", "F_samples")
+  )
 })

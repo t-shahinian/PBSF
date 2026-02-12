@@ -192,8 +192,9 @@ function sample_f(pre_calc_alloc_values,initialization_values,l)
     pre_calc_alloc_values.invΣhalf .= sparse(1:pre_calc_alloc_values.q, 1:pre_calc_alloc_values.q, 1 ./ sqrt.(initialization_values.Σ_sam)) # ??? is this using the same inverse sigma as in preallocation? it doesn't seem like it
     
     if l == 1
-        for k in 1:pre_calc_alloc_values.K
-            getAD(pre_calc_alloc_values.coords_ord, pre_calc_alloc_values.NN.nnIndx, pre_calc_alloc_values.NN.nnDist, pre_calc_alloc_values.NN.nnIndxLU, pre_calc_alloc_values.phi_K[k, l], 0.5, pre_calc_alloc_values.A[k], pre_calc_alloc_values.D[k]);
+        for k in 1:pre_calc_alloc_values.K ## changed pre_calc_alloc_values.phi_K[k,l] to below ???
+            getAD(pre_calc_alloc_values.coords_ord, pre_calc_alloc_values.NN.nnIndx, pre_calc_alloc_values.NN.nnDist, pre_calc_alloc_values.NN.nnIndxLU, pre_calc_alloc_values.phi_K[k],
+             0.5, pre_calc_alloc_values.A[k], pre_calc_alloc_values.D[k]);
             pre_calc_alloc_values.I_A[k] .= sparse(pre_calc_alloc_values.nnIndx_row, pre_calc_alloc_values.nnIndx_col, vcat(-pre_calc_alloc_values.A[k], ones(pre_calc_alloc_values.n)));
         end
     end
@@ -253,13 +254,13 @@ end
 function run_mcmc(pre_calc_alloc_values::NamedTuple, initialization_values::NamedTuple)    
 
 # preallocating space for the final matrices/output
-γ_samples = Array{Float64}(
+gamma_samples = Array{Float64}(
     undef,
     pre_calc_alloc_values.N_sam,
     (pre_calc_alloc_values.p + pre_calc_alloc_values.K) * pre_calc_alloc_values.q
 )
 
-Σ_samples= Array{Float64}(
+sigma_samples= Array{Float64}(
     undef,
     pre_calc_alloc_values.N_sam,
     pre_calc_alloc_values.q
@@ -284,15 +285,15 @@ F_samples = Array{Float64}(
         sample_gamma_sigma(pre_calc_alloc_values, initialization_values)
 
         # flattening the samples to fit into preallcoated matrices
-        γ_samples[l, :] .= vec(initialization_values.γ_sam)
-        Σ_samples[l, :] .= initialization_values.Σ_sam
+        gamma_samples[l, :] .= vec(initialization_values.γ_sam)
+        sigma_samples[l, :] .= initialization_values.Σ_sam
         F_samples[l, :] .= vec(pre_calc_alloc_values.F_sam)
         # Update progress
         next!(prog)
     end
     return (
-    γ_samples = γ_samples,
-    Σ_samples = Σ_samples,
+    gamma_samples = gamma_samples,
+    sigma_samples = sigma_samples,
     F_samples = F_samples)
     
 end
